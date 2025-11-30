@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
+import { Container, Button, Spinner, Alert } from 'react-bootstrap';
 import { getChannelId, getClips } from '../services/twitchService';
 import { TwitchClip } from '../types/twitch';
 import ClipCarousel from './ClipCarousel';
