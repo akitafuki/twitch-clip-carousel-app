@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Button, Spinner, Alert } from 'react-bootstrap';
 import { getChannelId, getClips } from '../services/twitchService';
-import { TwitchClip } from '../types/twitch';
+import { type TwitchClip } from '../types/twitch';
 import ClipCarousel from './ClipCarousel';
 
 interface ClipSettings {
