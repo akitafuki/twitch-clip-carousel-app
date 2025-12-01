@@ -28,16 +28,17 @@ You will need to have Node.js and npm installed on your machine.
     ```sh
     npm install
     ```
-3.  Create a `.env` file in the root of the project and add your Twitch API credentials:
+    Create a `.env` file in the root of the project and add your Twitch API credentials:
     ```
-    REACT_APP_TWITCH_CLIENT_ID=your_client_id
+    VITE_TWITCH_CLIENT_ID=your_client_id
+    VITE_TWITCH_CLIENT_SECRET=your_client_secret
     ```
 4.  Start the development server:
     ```sh
-    npm start
+    npm run dev
     ```
 
-The application will be available at [http://localhost:3000](http://localhost:3000).
+The application will be available at [http://localhost:5173](http://localhost:5173).
 
 ## Built With
 

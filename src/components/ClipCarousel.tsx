@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button, ProgressBar, Spinner } from 'react-bootstrap';
-import { TwitchClip } from '../types/twitch';
+import { type TwitchClip } from '../types/twitch';
 
 const ExternalLinkIcon = () => (
   <svg width="2em" height="2em" viewBox="0 0 24 24" fill="currentColor">

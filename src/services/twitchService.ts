@@ -1,8 +1,8 @@
 // src/services/twitchService.ts
-import { TwitchClipsResponse, TwitchUsersResponse, TwitchClip } from '../types/twitch';
+import { type TwitchClipsResponse, type TwitchUsersResponse, type TwitchClip } from '../types/twitch';
 
-const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID || '';
-const CLIENT_SECRET = process.env.REACT_APP_TWITCH_CLIENT_SECRET || '';
+const CLIENT_ID = import.meta.env.VITE_TWITCH_CLIENT_ID || '';
+const CLIENT_SECRET = import.meta.env.VITE_TWITCH_CLIENT_SECRET || '';
 
 // Function to get an App Access Token
 export const getAppAccessToken = async (): Promise<string | null> => {

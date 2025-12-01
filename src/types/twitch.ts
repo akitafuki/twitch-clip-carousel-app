@@ -1,4 +1,4 @@
-// src/types/twitch.d.ts
+// src/types/twitch.ts
 export interface TwitchClip {
   id: string;
   url: string;
