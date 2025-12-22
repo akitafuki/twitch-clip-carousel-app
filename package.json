@@ -12,7 +12,7 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "bootstrap": "^5.3.8",
-    "node": "^20.19.6",
+    "node": "^24.0.0",
     "react": "^19.2.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.0",
