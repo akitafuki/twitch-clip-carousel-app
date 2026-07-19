@@ -7,6 +7,7 @@ interface SetupScreenProps {
     clipType: string;
     clipPeriod: string;
     clipLength: string;
+    volume: number;
   }) => void;
 }
 
@@ -15,6 +16,7 @@ const SetupScreen: React.FC<SetupScreenProps> = ({ onSettingsSet }) => {
   const [clipType, setClipType] = useState('Top');
   const [clipPeriod, setClipPeriod] = useState('24h');
   const [clipLength, setClipLength] = useState('any');
+  const [volume, setVolume] = useState(100);
 
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -25,17 +27,18 @@ const SetupScreen: React.FC<SetupScreenProps> = ({ onSettingsSet }) => {
         clipType,
         clipPeriod,
         clipLength,
+        volume,
       });
     }
   };
 
   return (
-    <Container fluid className="d-flex align-items-center justify-content-center min-vh-100 bg-dark text-white">
+    <Container fluid className="d-flex align-items-center justify-content-center min-vh-100 text-white">
       <Row className="justify-content-center w-100">
         <Col xs={12} md={8} lg={6} xl={4}>
-          <Card bg="dark" text="white" className="p-4 shadow-lg rounded-3">
+          <Card className="setup-card p-3 p-sm-4 text-white border-0">
             <Card.Body className="text-center">
-              <h1 className="mb-3">Twitch Clip Carousel</h1>
+              <h1 className="mb-3 glow-title">Twitch Clip Carousel</h1>
               <p className="text-muted mb-4">
                 Enter a Twitch channel name and select your clip preferences to start watching.
               </p>
@@ -53,27 +56,28 @@ const SetupScreen: React.FC<SetupScreenProps> = ({ onSettingsSet }) => {
                 </Form.Group>
 
                 <Form.Group className="mb-4">
-                  <Form.Label>Clip Type</Form.Label>
-                  <div className="d-flex justify-content-center">
-                    <Form.Check
-                      type="radio"
-                      label="Top"
-                      name="clipType"
-                      id="clipTypeTop"
-                      value="Top"
-                      checked={clipType === 'Top'}
-                      onChange={(e) => setClipType(e.target.value)}
-                      className="me-3"
-                    />
-                    <Form.Check
-                      type="radio"
-                      label="Random"
-                      name="clipType"
-                      id="clipTypeRandom"
-                      value="Random"
-                      checked={clipType === 'Random'}
-                      onChange={(e) => setClipType(e.target.value)}
-                    />
+                  <Form.Label className="d-block text-center mb-3">Clip Selection Type</Form.Label>
+                  <div className="custom-check-group">
+                    <label className="custom-tag-check">
+                      <input
+                        type="radio"
+                        name="clipType"
+                        value="Top"
+                        checked={clipType === 'Top'}
+                        onChange={(e) => setClipType(e.target.value)}
+                      />
+                      <span className="custom-tag-label">🔥 Top Clips</span>
+                    </label>
+                    <label className="custom-tag-check">
+                      <input
+                        type="radio"
+                        name="clipType"
+                        value="Random"
+                        checked={clipType === 'Random'}
+                        onChange={(e) => setClipType(e.target.value)}
+                      />
+                      <span className="custom-tag-label">🎲 Random Clips</span>
+                    </label>
                   </div>
                 </Form.Group>
 
@@ -103,6 +107,20 @@ const SetupScreen: React.FC<SetupScreenProps> = ({ onSettingsSet }) => {
                     <option value="long">Long (60s+)</option>
                     <option value="any">Any</option>
                   </Form.Select>
+                </Form.Group>
+
+                <Form.Group className="mb-4" controlId="formVolume">
+                  <Form.Label className="d-flex justify-content-between">
+                    <span>Default Volume</span>
+                    <span className="text-white-50">{volume}%</span>
+                  </Form.Label>
+                  <Form.Range
+                    value={volume}
+                    onChange={(e) => setVolume(Number(e.target.value))}
+                    min={0}
+                    max={100}
+                    className="custom-slider"
+                  />
                 </Form.Group>
 
                 <Button variant="primary" type="submit" size="lg" className="w-100">

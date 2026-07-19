@@ -9,6 +9,7 @@ interface ClipSettings {
   clipType: string;
   clipPeriod: string;
   clipLength: string;
+  volume: number;
 }
 
 interface AFKScreenProps {
@@ -96,7 +97,7 @@ const AFKScreen: React.FC<AFKScreenProps> = ({ settings, accessToken }) => {
 
   return (
     <div className="bg-dark text-white min-vh-100">
-      <ClipCarousel clips={clips} handleSetNewChannel={handleSetNewChannel} />
+      <ClipCarousel clips={clips} handleSetNewChannel={handleSetNewChannel} volume={settings.volume} />
     </div>
   );
 };

@@ -9,6 +9,7 @@ interface ClipSettings {
   clipType: string;
   clipPeriod: string;
   clipLength: string;
+  volume: number;
 }
 
 function App() {
