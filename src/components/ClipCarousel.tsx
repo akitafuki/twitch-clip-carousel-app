@@ -17,12 +17,15 @@ const CopyIcon = () => (
 interface ClipCarouselProps {
   clips: TwitchClip[];
   handleSetNewChannel: () => void;
+  volume: number;
 }
 
-const ClipCarousel: React.FC<ClipCarouselProps> = ({ clips, handleSetNewChannel }) => {
+const ClipCarousel: React.FC<ClipCarouselProps> = ({ clips, handleSetNewChannel, volume }) => {
   const [index, setIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const autoplayTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [localVolume, setLocalVolume] = useState(volume);
+  const [elapsed, setElapsed] = useState(0);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const currentClip = clips[index];
 
@@ -31,29 +34,53 @@ const ClipCarousel: React.FC<ClipCarouselProps> = ({ clips, handleSetNewChannel 
     setIsLoading(true);
   }, [clips.length]);
 
+  // Handle active progress bar timing and clip transitions
   useEffect(() => {
-    if (autoplayTimeoutRef.current) {
-      clearTimeout(autoplayTimeoutRef.current);
-    }
-    if (currentClip) {
-      autoplayTimeoutRef.current = setTimeout(() => {
-        handleNextClip();
-      }, (currentClip.duration + 1) * 1000); // Add a 1-second buffer
-    }
+    setElapsed(0);
+    if (!currentClip || isLoading) return;
+
+    const intervalTime = 100; // ms
+    const timer = setInterval(() => {
+      setElapsed((prev) => {
+        const next = prev + intervalTime / 1000;
+        if (next >= currentClip.duration) {
+          clearInterval(timer);
+          handleNextClip();
+          return currentClip.duration;
+        }
+        return next;
+      });
+    }, intervalTime);
+
     return () => {
-      if (autoplayTimeoutRef.current) {
-        clearTimeout(autoplayTimeoutRef.current);
-      }
+      clearInterval(timer);
     };
-  }, [currentClip, handleNextClip]);
+  }, [currentClip, isLoading, handleNextClip]);
 
   const handleIframeLoad = () => {
     setIsLoading(false);
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow?.postMessage({
+        eventName: 'setVolume',
+        value: localVolume / 100,
+      }, '*');
+    }
   };
+
+  useEffect(() => {
+    if (iframeRef.current && !isLoading) {
+      iframeRef.current.contentWindow?.postMessage({
+        eventName: 'setVolume',
+        value: localVolume / 100,
+      }, '*');
+    }
+  }, [localVolume, isLoading]);
   
   const embedUrl = currentClip
     ? `${currentClip.embed_url}&parent=${window.location.hostname}&autoplay=true&muted=false&preload=metadata`
     : '';
+
+  const progressPercent = currentClip ? (elapsed / currentClip.duration) * 100 : 0;
 
   return (
     <div className="vh-100 d-flex flex-column bg-black">
@@ -70,9 +97,11 @@ const ClipCarousel: React.FC<ClipCarouselProps> = ({ clips, handleSetNewChannel 
         
         {currentClip && (
           <iframe
+            ref={iframeRef}
             src={embedUrl}
             height="100%"
             width="100%"
+            allow="autoplay"
             allowFullScreen
             title={currentClip.title}
             className="border-0"
@@ -83,13 +112,25 @@ const ClipCarousel: React.FC<ClipCarouselProps> = ({ clips, handleSetNewChannel 
       </div>
 
       <div className="w-100 p-3 bg-dark text-white">
-        <ProgressBar now={0} className="mb-2" />
+        <ProgressBar now={progressPercent} className="mb-2 custom-progress" />
         <div className="d-flex justify-content-between align-items-center">
           <div>
             <h5>{currentClip?.title}</h5>
             <p className="mb-0">Clipped by: {currentClip?.creator_name} | Views: {currentClip?.view_count}</p>
           </div>
           <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center me-4" style={{ width: '180px' }}>
+              <span className="me-2 text-white-50">🔊</span>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={localVolume}
+                onChange={(e) => setLocalVolume(Number(e.target.value))}
+                className="form-range custom-slider"
+              />
+              <span className="ms-2 small text-white-50" style={{ width: '35px' }}>{localVolume}%</span>
+            </div>
             <Button variant="link" onClick={handleNextClip} className="text-white">
               Next Clip
             </Button>

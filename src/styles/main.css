@@ -1,37 +1,198 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary-purple: #9146ff;
+  --primary-purple-hover: #772ce8;
+  --primary-purple-glow: rgba(145, 70, 255, 0.35);
+  --dark-bg: #0b0a11;
+  --card-bg: rgba(20, 20, 32, 0.7);
+  --card-border: rgba(145, 70, 255, 0.2);
+  --text-primary: #f5f5f9;
+  --text-secondary: #a0a0be;
+}
 
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #121212;
+  background-color: var(--dark-bg);
+  color: var(--text-primary);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(145, 70, 255, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(100, 65, 165, 0.08) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: #0d0d12;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #555;
-  border-radius: 4px;
+  background: rgba(145, 70, 255, 0.3);
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #777;
+  background: rgba(145, 70, 255, 0.5);
 }
 
-.controls-bar {
-  transition: opacity 0.3s ease-in-out;
+/* Glassmorphism card */
+.setup-card {
+  background: var(--card-bg) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--card-border) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 40px rgba(145, 70, 255, 0.04) !important;
 }
 
-.carousel-caption {
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 0.5rem;
-  padding: 1rem;
+/* Glowing heading */
+.glow-title {
+  font-weight: 800;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #ffffff 40%, #bfa3ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 40px rgba(145, 70, 255, 0.25);
+}
+
+/* Beautiful Inputs & Selects */
+.form-control, .form-select {
+  background-color: rgba(12, 12, 20, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-primary) !important;
+  border-radius: 12px !important;
+  padding: 12px 18px !important;
+  font-weight: 500;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-purple) !important;
+  box-shadow: 0 0 0 4px var(--primary-purple-glow) !important;
+  background-color: rgba(16, 16, 26, 0.95) !important;
+}
+
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Custom styled range slider */
+.custom-slider {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  height: 6px !important;
+  border-radius: 3px !important;
+}
+
+.custom-slider::-webkit-slider-thumb {
+  background: var(--primary-purple) !important;
+  box-shadow: 0 0 10px var(--primary-purple) !important;
+  transition: transform 0.1s ease-in-out;
+}
+
+.custom-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.custom-slider::-moz-range-thumb {
+  background: var(--primary-purple) !important;
+  box-shadow: 0 0 10px var(--primary-purple) !important;
+  transition: transform 0.1s ease-in-out;
+}
+
+.custom-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+.custom-slider:focus {
+  box-shadow: 0 0 0 4px var(--primary-purple-glow) !important;
+}
+
+/* Custom Styled Progress Bar */
+.custom-progress {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  height: 6px !important;
+  border-radius: 3px !important;
+  border: none !important;
+}
+
+.custom-progress .progress-bar {
+  background: linear-gradient(90deg, var(--primary-purple) 0%, #d3bbff 100%) !important;
+  box-shadow: 0 0 12px var(--primary-purple);
+  transition: width 0.1s linear !important;
+}
+
+/* Primary Purple Button */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-hover) 100%) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 14px 28px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 18px rgba(145, 70, 255, 0.35) !important;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(145, 70, 255, 0.55) !important;
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* Custom Radio Checks styled as modern tags */
+.custom-check-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.custom-tag-check {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.custom-tag-check input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.custom-tag-label {
+  display: inline-block;
+  padding: 10px 22px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.custom-tag-check input:checked + .custom-tag-label {
+  background-color: rgba(145, 70, 255, 0.15);
+  border-color: var(--primary-purple);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(145, 70, 255, 0.25);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.custom-tag-check:hover .custom-tag-label {
+  border-color: rgba(145, 70, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
 }
