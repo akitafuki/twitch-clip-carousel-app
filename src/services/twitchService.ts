@@ -41,7 +41,7 @@ export const getChannelId = async (channelName: string, accessToken: string): Pr
   }
 
   try {
-    const response = await fetch(`https://api.twitch.tv/helix/users?login=${channelName}`, {
+    const response = await fetch(`https://api.twitch.tv/helix/users?login=${encodeURIComponent(channelName)}`, {
       headers: {
         'Client-ID': CLIENT_ID,
         Authorization: `Bearer ${accessToken}`,
@@ -50,7 +50,7 @@ export const getChannelId = async (channelName: string, accessToken: string): Pr
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error(`Failed to get channel ID for ${channelName}:`, errorData);
+      console.error('Failed to get channel ID for channel:', channelName, errorData);
       return null;
     }
 
