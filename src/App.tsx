@@ -18,9 +18,22 @@ function App() {
   const [loadingToken, setLoadingToken] = useState<boolean>(true);
 
   useEffect(() => {
-    const storedSettings = localStorage.getItem('twitchClipSettings');
-    if (storedSettings) {
-      setSettings(JSON.parse(storedSettings));
+    const params = new URLSearchParams(window.location.search);
+    const urlChannel = params.get('channel');
+
+    if (urlChannel) {
+      setSettings({
+        channelName: urlChannel.trim(),
+        clipType: params.get('type') || 'Top',
+        clipPeriod: params.get('period') || '24h',
+        clipLength: params.get('length') || 'any',
+        volume: params.has('volume') ? Number(params.get('volume')) : 100,
+      });
+    } else {
+      const storedSettings = localStorage.getItem('twitchClipSettings');
+      if (storedSettings) {
+        setSettings(JSON.parse(storedSettings));
+      }
     }
 
     const fetchToken = async () => {

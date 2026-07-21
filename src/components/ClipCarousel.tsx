@@ -21,6 +21,7 @@ interface ClipCarouselProps {
 }
 
 const ClipCarousel: React.FC<ClipCarouselProps> = ({ clips, handleSetNewChannel, volume }) => {
+  const isObsMode = new URLSearchParams(window.location.search).get('obs') === 'true';
   const [index, setIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [localVolume, setLocalVolume] = useState(volume);
@@ -83,12 +84,12 @@ const ClipCarousel: React.FC<ClipCarouselProps> = ({ clips, handleSetNewChannel,
   const progressPercent = currentClip ? (elapsed / currentClip.duration) * 100 : 0;
 
   return (
-    <div className="vh-100 d-flex flex-column bg-black">
+    <div className={`vh-100 d-flex flex-column ${isObsMode ? 'bg-transparent' : 'bg-black'}`}>
       <div 
         className="flex-grow-1 position-relative"
         style={{ minHeight: '300px', minWidth: '400px' }}
       >
-        {isLoading && (
+        {isLoading && !isObsMode && (
           <div className="position-absolute top-50 start-50 translate-middle text-white text-center">
             <Spinner animation="border" role="status" />
             <p className="mt-2">Loading Clip...</p>
@@ -106,46 +107,52 @@ const ClipCarousel: React.FC<ClipCarouselProps> = ({ clips, handleSetNewChannel,
             title={currentClip.title}
             className="border-0"
             onLoad={handleIframeLoad}
-            style={{ opacity: isLoading ? 0 : 1, transition: 'opacity 0.5s' }}
+            style={{ opacity: isLoading && !isObsMode ? 0 : 1, transition: 'opacity 0.5s' }}
           ></iframe>
         )}
       </div>
 
-      <div className="w-100 p-3 bg-dark text-white">
-        <ProgressBar now={progressPercent} className="mb-2 custom-progress" />
-        <div className="d-flex justify-content-between align-items-center">
-          <div>
-            <h5>{currentClip?.title}</h5>
-            <p className="mb-0">Clipped by: {currentClip?.creator_name} | Views: {currentClip?.view_count}</p>
-          </div>
-          <div className="d-flex align-items-center">
-            <div className="d-flex align-items-center me-4" style={{ width: '180px' }}>
-              <span className="me-2 text-white-50">🔊</span>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={localVolume}
-                onChange={(e) => setLocalVolume(Number(e.target.value))}
-                className="form-range custom-slider"
-              />
-              <span className="ms-2 small text-white-50" style={{ width: '35px' }}>{localVolume}%</span>
+      {!isObsMode ? (
+        <div className="w-100 p-3 bg-dark text-white">
+          <ProgressBar now={progressPercent} className="mb-2 custom-progress" />
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <h5>{currentClip?.title}</h5>
+              <p className="mb-0">Clipped by: {currentClip?.creator_name} | Views: {currentClip?.view_count}</p>
             </div>
-            <Button variant="link" onClick={handleNextClip} className="text-white">
-              Next Clip
-            </Button>
-            <Button variant="link" href={currentClip?.url} target="_blank" className="text-white">
-              <ExternalLinkIcon />
-            </Button>
-            <Button variant="link" onClick={() => currentClip && navigator.clipboard.writeText(currentClip.url)} className="text-white">
-              <CopyIcon />
-            </Button>
-            <Button variant="outline-light" onClick={handleSetNewChannel}>
-              Set New Channel
-            </Button>
+            <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center me-4" style={{ width: '180px' }}>
+                <span className="me-2 text-white-50">🔊</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={localVolume}
+                  onChange={(e) => setLocalVolume(Number(e.target.value))}
+                  className="form-range custom-slider"
+                />
+                <span className="ms-2 small text-white-50" style={{ width: '35px' }}>{localVolume}%</span>
+              </div>
+              <Button variant="link" onClick={handleNextClip} className="text-white">
+                Next Clip
+              </Button>
+              <Button variant="link" href={currentClip?.url} target="_blank" className="text-white">
+                <ExternalLinkIcon />
+              </Button>
+              <Button variant="link" onClick={() => currentClip && navigator.clipboard.writeText(currentClip.url)} className="text-white">
+                <CopyIcon />
+              </Button>
+              <Button variant="outline-light" onClick={handleSetNewChannel}>
+                Set New Channel
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="w-100 bg-transparent" style={{ height: '4px' }}>
+          <ProgressBar now={progressPercent} className="custom-progress" style={{ height: '4px', border: 'none', borderRadius: 0 }} />
+        </div>
+      )}
     </div>
   );
 };
